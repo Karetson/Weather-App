@@ -1,36 +1,26 @@
 package pl.weatherapp.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.weatherapp.clients.OpenWeatherMapClient;
 import pl.weatherapp.models.Forecast;
-import pl.weatherapp.repositories.OpenWeatherMapClient;
 import pl.weatherapp.repositories.WeatherRepository;
 
 @Service
+@RequiredArgsConstructor
 public class WeatherService implements WeatherRepository {
-    private Logger logger = LoggerFactory.getLogger(WeatherService.class);
-
-    private final String appKey;
-    private final ObjectMapper objectMapper;
+    private static final String APP_KEY = "e340e3bfc6132fc8a03ed1ce48e2e3dc";
     private final OpenWeatherMapClient openWeatherMapFeignClient;
 
-    public WeatherService(ObjectMapper objectMapper,
-                          OpenWeatherMapClient openWeatherMapFeignClient,
-                          @Value("${service.open-weather-map.api-key}") String appKey) {
-        this.objectMapper = objectMapper;
-        this.openWeatherMapFeignClient = openWeatherMapFeignClient;
-        this.appKey = appKey;
-    }
+//    public WeatherService(@Value("${service.open-weather-map.api-key}") String appKey,
+//                          OpenWeatherMapClient openWeatherMapFeignClient) {
+//        this.appKey = appKey;
+//        this.openWeatherMapFeignClient = openWeatherMapFeignClient;
+//    }
 
     @Override
     public Forecast getCurrentWeatherByCity(String cityName) {
-        logger.debug("getCurrentWeatherByCity({})", cityName);
-        Forecast forecast = openWeatherMapFeignClient.getCurrentWeatherByCity(cityName, appKey);
-
-
-        return forecast;
+        return openWeatherMapFeignClient.getCurrentWeatherByCity(cityName, APP_KEY);
     }
 }
