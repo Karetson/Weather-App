@@ -31,6 +31,6 @@ public class WeatherService implements WeatherRepository {
         Forecast forecast = openWeatherMapFeignClient.getCurrentWeatherByCity(cityName, appKey);
 
 
-        return response;
+        return forecast;
     }
 }
