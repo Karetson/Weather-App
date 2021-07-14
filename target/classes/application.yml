@@ -2,3 +2,13 @@ service:
   open-weather-map:
     url: http://api.openweathermap.org
     api-key: e340e3bfc6132fc8a03ed1ce48e2e3dc
+    units: metric
+
+#feign:
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 5000
+#        readTimeout: 5000
+#        loggerLevel: basic
+#        errorDecoder: pl.weather.adapter.feign.client.DefaultErrorDecoder
