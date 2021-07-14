@@ -46,7 +46,7 @@ class WeatherApplicationIntegrationTest {
 
     @Test
     void shouldReturnOkStatus() throws Exception {
-        String cityName = "Rzeszów";
+        String cityName = "Warszawa";
 
         weatherApiMock.mock(cityName, 200, loadPayload(weatherApi200Response));
 
