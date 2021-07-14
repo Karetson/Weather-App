@@ -1,14 +1,20 @@
 package pl.weather;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.StreamUtils;
 import pl.weather.util.WeatherApiMock;
+
+import java.nio.charset.Charset;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,6 +28,9 @@ class WeatherApplicationIntegrationTest {
 
     @Autowired
     WeatherApiMock weatherApiMock;
+
+    @Value("classpath:weather_api_200_response.json")
+    Resource weatherApi200Response;
 
     @BeforeEach
     public void setUp() {
@@ -37,13 +46,7 @@ class WeatherApplicationIntegrationTest {
     void shouldReturnOkStatus() throws Exception {
         String cityName = "Rzeszów";
 
-        weatherApiMock.mock(cityName, 200, "{\n" +
-                "    \"temperature\": 32.8,\n" +
-                "    \"pressure\": 999,\n" +
-                "    \"direction\": 140,\n" +
-                "    \"windSpeed\": 4.63,\n" +
-                "    \"cloudy\": 0\n" +
-                "}");
+        weatherApiMock.mock(cityName, 200, loadPayload(weatherApi200Response));
 
         mvc.perform(get("/api/weather/data?cityName=" + cityName)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -60,5 +63,10 @@ class WeatherApplicationIntegrationTest {
     void shouldReturnBadRequestStatus() throws Exception {
         mvc.perform(get("/api/weather/data?cityName="))
                 .andExpect(status().isBadRequest());
+    }
+
+    @SneakyThrows
+    private String loadPayload(Resource resource) {
+        return StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
     }
 }
