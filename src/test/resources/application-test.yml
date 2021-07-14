@@ -1,3 +1,4 @@
 service:
   open-weather-map:
     url: localhost:9000
+    api-key: e340e3bfc6132fc8a03ed1ce48e2e3dc
