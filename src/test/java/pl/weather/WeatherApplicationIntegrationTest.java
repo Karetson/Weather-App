@@ -46,7 +46,7 @@ class WeatherApplicationIntegrationTest {
 
     @Test
     void shouldReturnOkStatus() throws Exception {
-        String cityName = "Warszawa";
+        String cityName = "Rzeszów";
 
         weatherApiMock.mock(cityName, 200, loadPayload(weatherApi200Response));
 
@@ -63,7 +63,7 @@ class WeatherApplicationIntegrationTest {
 
     @Test
     void shouldReturnBadRequestStatus() throws Exception {
-        mvc.perform(get("/api/weather/data?cityName="))
+        mvc.perform(get("/api/weather/data"))
                 .andExpect(status().isBadRequest());
     }
 
